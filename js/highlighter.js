@@ -19,11 +19,10 @@ function removeHighlight() {
 
 const steps = [
   {
-    selector: "h2",
+    highlightElement: { cssSelector: "h2" },
   },
   {
-    selector: "input[type='submit']",
-    parent: true,
+    highlightElement: { cssSelector: "input[type='submit']", parent: true },
   },
 ];
 
@@ -39,13 +38,15 @@ function nextStep() {
   removeHighlight();
   const step = gen.next();
   if (!step.done) {
-    const elements = document.querySelectorAll(step.value.selector);
+    const elements = document.querySelectorAll(
+      step.value.highlightElement.cssSelector
+    );
     elements.forEach((el) => {
       el.addEventListener("click", function handler() {
         el.removeEventListener("click", handler);
         nextStep();
       });
-      if (step.value.parent) {
+      if (step.value.highlightElement.parent) {
         el = el.parentNode;
       }
       el.classList.add("highlighted");
